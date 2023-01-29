@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
+import useRevenueCat from "../hooks/useRevenueCat";
 
 export type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -27,15 +28,29 @@ const ActionRow = ({
   vertical,
 }: Props) => {
   const navigation = useNavigation<NavigationProp>();
+  const { isProMember } = useRevenueCat();
+
+  const lockedForProMembers = requiresPro && !isProMember;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(screen)}
+      onPress={() =>
+        lockedForProMembers
+          ? navigation.navigate("Paywall")
+          : navigation.navigate(screen)
+      }
       className={`flex m-1.5 flex-1 justify-center items-center py-6 rounded-lg space-x-2 ${
         vertical ? "flex-col" : "flex-row"
       }`}
-      style={{ backgroundColor: color }}
+      style={{ backgroundColor: lockedForProMembers ? "gray" : color }}
     >
+      {lockedForProMembers && (
+        <View className="absolute top-4 right-4 rotate-12 items-center">
+          <Ionicons name="lock-closed" size={20} color="white" />
+          <Text className="text-white font-extrabold">PRO</Text>
+        </View>
+      )}
+
       <Ionicons name={icon} size={30} color="white" />
       <Text className="text-white font-bold text-lg">{title}</Text>
     </TouchableOpacity>
