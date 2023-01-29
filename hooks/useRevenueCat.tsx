@@ -6,8 +6,8 @@ import Purchases, {
 } from "react-native-purchases";
 
 const APIKeys = {
-  apple: "appl_uHCuiDJBIEDKLBKohfNJLjlkjHDKJKo",
-  google: "revenuecat_google_api_key",
+  apple: "*****",
+  google: "*****",
 };
 
 const typesOfMembership = {
